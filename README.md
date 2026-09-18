@@ -48,6 +48,9 @@ npm run preview
 - `src/styles/global.css`：视觉与响应式样式。
 - `public/images/`：优化后的页面图片。
 - `reference-assets/sources.json`：素材源 URL。
+- `src/data/icons.ts`：新物定制图标的唯一源数据。
+- `/design/`：图标说明、尺寸预览和 SVG 下载。
+- `docs/icon-system.md`：图标设计原则、参考来源与使用约定。
 
 ## 验证
 

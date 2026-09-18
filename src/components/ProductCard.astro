@@ -1,13 +1,12 @@
 ---
 import { withBase } from '../lib/urls';
 import type { Product } from '../data/products';
-import Icon from './Icon.astro';
 interface Props { product: Product; }
 const {product:p} = Astro.props;
 ---
 <article class="product-card" data-product data-category={p.categoryId} data-search={[p.name,p.brand,p.category,p.subtitle,...p.tags].join(' ').toLowerCase()}>
   <a class="product-visual" href={withBase(`/products/${p.slug}/`)} style={`--product-bg:${p.color}`} aria-label={`了解 ${p.name}`}>
-    <span class="image-label">{p.category}</span><img src={withBase(`/images/${p.image}.webp`)} width="700" height="550" alt={`${p.name} 官方产品图`} loading="lazy"/><span class="card-arrow"><Icon name="external"/></span>
+    <span class="image-label">{p.category}</span><img src={withBase(`/images/${p.image}.webp`)} width="700" height="550" alt={`${p.name} 官方产品图`} loading="lazy"/><span class="card-cta">查看产品</span>
   </a>
   <div class="product-meta"><span>{p.brand}</span><span class="source-label">资料介绍</span></div>
   <h3><a href={withBase(`/products/${p.slug}/`)}>{p.name}</a></h3><p>{p.subtitle}</p>

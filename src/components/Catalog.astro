@@ -7,7 +7,7 @@ import Icon from './Icon.astro';
   <div class="catalog-toolbar"><div class="category-tabs" aria-label="按硬件类别筛选">{categories.map((c,i)=><button data-category-filter={c.id} aria-pressed={i===0} class:list={{selected:i===0}}><Icon name={c.icon} size={18}/>{c.name}</button>)}</div><label class="catalog-search" id="search"><Icon name="search" size={18}/><input type="search" placeholder="搜索名称、用途…" aria-label="搜索硬件" autocomplete="off"/></label></div>
   <div class="catalog-caption"><p>慢慢逛，总有一件让你好奇。<span id="result-count" aria-live="polite">共 {products.length} 件产品</span></p><span>按编辑收录顺序</span></div>
   <div class="product-grid">{products.map(p=><ProductCard product={p}/>)}</div>
-  <div class="empty-state" hidden><Icon name="search" size={32}/><h3>还没找到这件新物</h3><p>试试其他关键词，或切换分类。</p><button class="button" id="reset-search">查看全部硬件 <Icon/></button></div>
+  <div class="empty-state" hidden><Icon name="search" size={32}/><h3>还没找到这件新物</h3><p>试试其他关键词，或切换分类。</p><button class="button" id="reset-search">查看全部硬件</button></div>
   <noscript><p class="notice">当前展示全部产品；开启 JavaScript 后可使用搜索和分类筛选。</p></noscript>
 </section>
 <script>

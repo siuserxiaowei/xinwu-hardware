@@ -17,8 +17,8 @@ await fs.mkdir('verification', {recursive:true});
 const checks = [];
 async function check(name, fn) { await fn(); checks.push(name); console.log(`PASS ${name}`); }
 try {
-  await check('13 static routes, loaded images, desktop layout', async()=>{
-    for(const path of ['/', '/products/', '/products/even-g1/', '/products/plaud-note/', '/products/emo/', '/products/rabbit-r1/', '/products/plaud-notepin/', '/products/loona/', '/collections/', '/partners/', '/submit/', '/about/', '/missing-page-smoke-test/']) {
+  await check('14 static routes, loaded images, desktop layout', async()=>{
+    for(const path of ['/', '/products/', '/products/even-g1/', '/products/plaud-note/', '/products/emo/', '/products/rabbit-r1/', '/products/plaud-notepin/', '/products/loona/', '/collections/', '/partners/', '/submit/', '/about/', '/design/', '/missing-page-smoke-test/']) {
       const response=await page.goto(origin+path,{waitUntil:'networkidle'});
       assert.equal(response.status(),path==='/missing-page-smoke-test/'?404:200,path);
       // Load any images below the fold before checking them.
@@ -28,7 +28,26 @@ try {
       assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true,path);
       assert.equal(await page.locator('video,iframe').count(),0,path);
       assert.equal(await page.locator('h1').count(),1,path);
+      // Outbound-window symbols must never label navigation inside this site.
+      for(const link of await page.locator('a:has(svg[data-icon="external"])').evaluateAll(links=>links.map(a=>({href:a.href,target:a.target,text:a.textContent.trim()})))) {
+        assert.notEqual(new URL(link.href).origin,new URL(origin).origin,path);
+        assert.equal(link.target,'_blank',path);
+        assert.ok(link.text.length>0,path);
+      }
     }
+  });
+  await check('icon guide, size preview and 16 downloadable SVG assets',async()=>{
+    await page.goto(origin+'/design/');
+    assert.equal(await page.locator('.icon-board article').count(),16);
+    await page.getByRole('button',{name:'32px',exact:true}).click();
+    assert.equal(await page.locator('.icon-specimen svg').first().evaluate(svg=>getComputedStyle(svg).width),'32px');
+    await page.getByRole('button',{name:'20px',exact:true}).click();
+    assert.equal(await page.locator('.icon-specimen svg').first().evaluate(svg=>getComputedStyle(svg).width),'20px');
+    await page.getByRole('button',{name:'24px',exact:true}).click();
+    const links=await page.locator('.icon-board a[download]').evaluateAll(links=>links.map(a=>a.href));
+    for(const url of links){const response=await page.request.get(url);assert.equal(response.status(),200);assert.match(response.headers()['content-type'],/image\/svg\+xml/);assert.match(await response.text(),/viewBox="0 0 24 24"/);}
+    await page.screenshot({path:'verification/design-desktop.png',fullPage:true});
+    await page.locator('.icon-catalog').screenshot({path:'verification/icon-family.png'});
   });
   await check('category, combined search, empty state, clear, query reload',async()=>{
     await page.goto(origin+'/products/');
@@ -77,7 +96,7 @@ try {
   await check('mobile 390px and 320px layouts, menu and filtering',async()=>{
     for(const width of [390,320]) {
       await page.setViewportSize({width,height:844});
-      for(const path of ['/','/products/even-g1/','/collections/','/partners/','/submit/']) {
+      for(const path of ['/','/products/even-g1/','/collections/','/partners/','/submit/','/design/']) {
         await page.goto(origin+path,{waitUntil:'networkidle'});
         assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true,`${width} ${path}`);
       }
@@ -86,13 +105,16 @@ try {
     await page.goto(origin+'/');
     await page.getByRole('button',{name:'打开导航'}).click();
     assert.equal(await page.locator('#mobile-nav').isVisible(),true);
+    assert.equal(await page.locator('[data-menu-label]').textContent(),'关闭');
     await page.keyboard.press('Escape');
     assert.equal(await page.locator('#mobile-nav').isVisible(),false);
+    assert.equal(await page.locator('[data-menu-label]').textContent(),'菜单');
     await page.locator('[data-category-filter="robots"]').click();
     assert.equal(await page.locator('[data-product]:visible').count(),2);
     await page.locator('[data-category-filter="all"]').click();
     await page.locator('img').evaluateAll(images=>images.forEach(image=>image.loading='eager'));
     await page.waitForFunction(()=>[...document.images].every(image=>image.complete));
+    await page.evaluate(()=>{document.activeElement?.blur?.();window.scrollTo({top:0,behavior:'instant'});});
     await page.screenshot({path:'verification/home-mobile.png',fullPage:true});
   });
   await check('no browser errors, no remotely loaded players or media',async()=>{
