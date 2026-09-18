@@ -1,0 +1,33 @@
+---
+import {products,categories} from '../data/products';
+import ProductCard from './ProductCard.astro';
+import Icon from './Icon.astro';
+---
+<section class="catalog" id="catalog" aria-label="产品目录">
+  <div class="catalog-toolbar"><div class="category-tabs" aria-label="按硬件类别筛选">{categories.map((c,i)=><button data-category-filter={c.id} aria-pressed={i===0} class:list={{selected:i===0}}><Icon name={c.icon} size={18}/>{c.name}</button>)}</div><label class="catalog-search" id="search"><Icon name="search" size={18}/><input type="search" placeholder="搜索名称、用途…" aria-label="搜索硬件" autocomplete="off"/></label></div>
+  <div class="catalog-caption"><p>慢慢逛，总有一件让你好奇。<span id="result-count" aria-live="polite">共 {products.length} 件产品</span></p><span>按编辑收录顺序</span></div>
+  <div class="product-grid">{products.map(p=><ProductCard product={p}/>)}</div>
+  <div class="empty-state" hidden><Icon name="search" size={32}/><h3>还没找到这件新物</h3><p>试试其他关键词，或切换分类。</p><button class="button" id="reset-search">查看全部硬件 <Icon/></button></div>
+  <noscript><p class="notice">当前展示全部产品；开启 JavaScript 后可使用搜索和分类筛选。</p></noscript>
+</section>
+<script>
+  const input = document.querySelector<HTMLInputElement>('.catalog-search input');
+  const filters = [...document.querySelectorAll<HTMLButtonElement>('[data-category-filter]')];
+  const cards = [...document.querySelectorAll<HTMLElement>('[data-product]')];
+  const empty = document.querySelector<HTMLElement>('.empty-state');
+  let category = new URLSearchParams(location.search).get('category') || 'all';
+  if (!filters.some(f=>f.dataset.categoryFilter===category)) category='all';
+  if(input) input.value = new URLSearchParams(location.search).get('q') || '';
+  function update(sync = true) {
+    const q=(input?.value||'').trim().toLowerCase(); let total=0;
+    cards.forEach(card=> { const show=(category==='all'||card.dataset.category===category) && q.split(/\s+/).every(term=>card.dataset.search?.includes(term)); card.hidden=!show; if(show)total++; });
+    filters.forEach(f=>{const selected=f.dataset.categoryFilter===category;f.classList.toggle('selected',selected);f.setAttribute('aria-pressed',String(selected));});
+    const count=document.querySelector('#result-count');if(count) count.textContent=`共 ${total} 件产品`; if(empty)empty.hidden=total>0;
+    if(sync){const url=new URL(location.href);category==='all'?url.searchParams.delete('category'):url.searchParams.set('category',category);q?url.searchParams.set('q',q):url.searchParams.delete('q');history.replaceState(null,'',url);}
+  }
+  filters.forEach(f=>f.addEventListener('click',()=>{category=f.dataset.categoryFilter||'all';update();}));
+  input?.addEventListener('input',()=>update());
+  document.querySelector('#reset-search')?.addEventListener('click',()=>{category='all';if(input)input.value='';update();input?.focus();});
+  update(false);
+  if(location.hash==='#search')input?.focus();
+</script>

@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.astro/
+.DS_Store
+verification/
+reference-assets/*.original
+reference-assets/*.webp
+.env
+.env.*
+!.env.example

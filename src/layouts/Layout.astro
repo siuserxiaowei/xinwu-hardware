@@ -1,0 +1,36 @@
+---
+import { withBase } from '../lib/urls';
+import '../styles/global.css';
+import Icon from '../components/Icon.astro';
+interface Props { title?: string; description?: string; active?: string; }
+const {title = '新物 · 发现有意思的 AI 硬件', description = '从一件新硬件，发现生活的新可能。探索智能眼镜、录音设备、陪伴机器人与随身 AI。', active = ''} = Astro.props;
+---
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content={description}/><meta name="robots" content="noindex,nofollow"/>
+    <link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg')}/><title>{title}</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">跳到主要内容</a>
+    <header class="site-header"><div class="header-inner">
+      <a class="brand" href={withBase('/')} aria-label="新物首页"><img src={withBase('/favicon.svg')} width="32" height="32" alt=""/><strong>新物<span>XINWU</span></strong></a>
+      <nav class="desktop-nav" aria-label="主导航">
+        <a href={withBase('/')} class:list={{active:active==='home'}}>发现</a>
+        <a href={withBase('/products/')} class:list={{active:active==='products'}}>全部硬件</a>
+        <a href={withBase('/collections/')} class:list={{active:active==='collections'}}>灵感专题</a>
+        <a href={withBase('/partners/')} class:list={{active:active==='partners'}}>商务合作 <span class="tiny-dot"></span></a>
+      </nav>
+      <div class="header-actions"><a class="search-link" href={withBase('/products/#search')} aria-label="搜索产品"><Icon name="search"/></a><a class="submit-link" href={withBase('/submit/')}><Icon name="plus" size={16}/>提交产品</a><button class="mobile-toggle" aria-label="打开导航" aria-expanded="false" aria-controls="mobile-nav"><Icon name="menu"/></button></div>
+    </div><nav id="mobile-nav" class="mobile-nav" hidden aria-label="移动导航"><a href={withBase('/')}>发现</a><a href={withBase('/products/')}>全部硬件</a><a href={withBase('/collections/')}>灵感专题</a><a href={withBase('/partners/')}>商务合作</a></nav></header>
+    <main id="main"><slot/></main>
+    <footer class="site-footer container"><div><a class="brand" href={withBase('/')}><img src={withBase('/favicon.svg')} width="25" height="25" alt=""/><strong>新物<span>XINWU</span></strong></a><p>从一件新硬件，发现生活的新可能。</p></div><div class="footer-links"><a href={withBase('/about/')}>关于新物与收录说明</a><a href={withBase('/partners/')}>品牌合作 ↗</a><span>© 2026 新物 · 基础预览版</span></div></footer>
+    <script>
+      const toggle = document.querySelector<HTMLButtonElement>('.mobile-toggle');
+      const nav = document.querySelector<HTMLElement>('#mobile-nav');
+      toggle?.addEventListener('click', () => { if (!nav) return; nav.hidden = !nav.hidden; toggle.setAttribute('aria-expanded', String(!nav.hidden)); toggle.setAttribute('aria-label', nav.hidden ? '打开导航' : '关闭导航'); });
+      document.addEventListener('keydown', e => { if (e.key === 'Escape' && nav && toggle) { nav.hidden = true; toggle.setAttribute('aria-expanded', 'false'); toggle.setAttribute('aria-label', '打开导航'); toggle.focus(); } });
+    </script>
+  </body>
+</html>

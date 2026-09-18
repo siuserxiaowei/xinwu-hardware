@@ -1,0 +1,5 @@
+---
+import { withBase } from '../lib/urls';
+import Layout from '../layouts/Layout.astro';
+---
+<Layout title="页面没找到 · 新物"><div class="container empty-page"><span class="eyebrow">404 / NOT FOUND</span><h1>这件新物，还没出现在这里。</h1><p>可以回到产品库，继续发现有意思的硬件。</p><a class="button" href={withBase('/products/')}>返回产品库 →</a></div></Layout>
