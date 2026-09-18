@@ -1,8 +1,21 @@
-# 新物图标系统 · v1
+# 新物图标系统 · v2
 
 目标：读者能识别产品类别，知道每个操作会去哪里。保留网站纸白、石墨黑与橙色的视觉方向。
 
+## 第二版：有体积感的分类物件
+
+用户提供 Apple 设计大奖页面后，新增 5 枚 160 × 160 原创 SVG 分类插画。借鉴 Tide Guide 的物件层次和 Moonlitt 的简洁立体主体，不复制现有 App 图标。统一左上方光源、圆角底板、奶油白/石墨机身、新物橙细节与柔和投影。
+
+- 源数据：`src/data/category-art.ts`；输出：`/category-icons/<name>.svg`。
+- `CategoryIcon.astro` 在首页、产品库与设计页复用，作为配有中文标签的装饰图片。
+- 桌面分类图 56px，手机 39–44px，展示页最大 144px。
+- 分类依然通过文字、轮廓、下划线和边框标明类别及选中状态；不只靠颜色。
+- 16 枚基础线条图标保留，搜索/菜单等功能继续使用简洁线条。
+- 本轮没有改动品牌标志，也没有将分类插画冒充具体产品照片。
+
 ## 本次参考
+
+- Apple 设计大奖：https://developer.apple.com/cn/design/awards/ 。用户指定的视觉参考，实际查看 2026 年获奖 App 图标。
 
 - Apple 中国商店：https://www.apple.com.cn/store 。借鉴产品类别有明确文字名称的组织方式。
 - Nothing：https://nothing.tech/ 。借鉴统一的品牌语言与 Discover / Learn more 等文字行动提示。

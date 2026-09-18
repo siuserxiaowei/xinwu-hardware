@@ -1,11 +1,11 @@
-import type { IconName } from './icons';
+import type { CategoryArtName } from './category-art';
 export interface Product {
   slug: string; name: string; brand: string; category: string; categoryId: string;
   image: string; color: string; subtitle: string; description: string; tags: string[];
   source: string; scenes: [string, string][]; steps: string[]; questions: string[];
   facts: [string, string][];
 }
-export const categories: {id:string;name:string;icon:IconName}[] = [
+export const categories: {id:string;name:string;icon:CategoryArtName}[] = [
   { id: 'all', name: '全部硬件', icon: 'devices' },
   { id: 'glasses', name: '智能眼镜', icon: 'glasses' },
   { id: 'recorders', name: '录音与效率', icon: 'recorder' },

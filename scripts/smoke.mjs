@@ -63,6 +63,16 @@ try {
     await page.locator('#reset-search').click();
     assert.equal(await page.locator('[data-product]:visible').count(),6);
   });
+  await check('five illustrated category assets and named filter buttons',async()=>{
+    await page.goto(origin+'/design/');
+    const links=await page.locator('.category-art-board a[download]').evaluateAll(links=>links.map(a=>a.href));
+    assert.equal(links.length,5);
+    for(const url of links){const response=await page.request.get(url);assert.equal(response.status(),200);assert.match(response.headers()['content-type'],/image\/svg\+xml/);assert.match(await response.text(),/viewBox="0 0 160 160"/);}
+    await page.locator('.category-showcase').screenshot({path:'verification/category-art-v2.png'});
+    await page.goto(origin+'/products/');
+    for(const name of ['全部硬件','智能眼镜','录音与效率','陪伴机器人','随身 AI']) assert.equal(await page.getByRole('button',{name,exact:true}).count(),1);
+    assert.equal(await page.locator('.category-tabs img').evaluateAll(images=>images.length===5&&images.every(image=>image.complete&&image.naturalWidth>0)),true);
+  });
   await check('product page navigation and safe external video links',async()=>{
     await page.locator('.product-visual').first().click();
     assert.equal(page.url(),origin+'/products/even-g1/');

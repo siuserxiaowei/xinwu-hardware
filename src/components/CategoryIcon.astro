@@ -1,0 +1,7 @@
+---
+import type {CategoryArtName} from '../data/category-art';
+import {withBase} from '../lib/urls';
+interface Props {name: CategoryArtName; size?: number;}
+const {name, size = 56} = Astro.props;
+---
+<img class="category-art" src={withBase(`/category-icons/${name}.svg`)} width={size} height={size} alt="" aria-hidden="true" decoding="async"/>
