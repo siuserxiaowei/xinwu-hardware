@@ -52,13 +52,13 @@ try {
     await page.locator('#reset-search').click();
     assert.equal(await page.locator('[data-product]:visible').count(),6);
   });
-  await check('five illustrated category assets and named filter buttons',async()=>{
+  await check('approved E sticker assets and named filter buttons',async()=>{
     await page.goto(origin+'/products/',{waitUntil:'networkidle'});
     const links=await page.locator('.category-tabs img').evaluateAll(images=>images.map(image=>image.src));
     assert.equal(links.length,5);
-    for(const url of links){const response=await page.request.get(url);assert.equal(response.status(),200);assert.match(response.headers()['content-type'],/image\/svg\+xml/);assert.match(await response.text(),/viewBox="0 0 160 160"/);}
+    for(const url of links){const response=await page.request.get(url);assert.equal(response.status(),200);assert.match(url,/\/images\/icons-e\/[^/]+\.webp$/);assert.match(response.headers()['content-type'],/image\/webp/);}
     for(const name of ['全部硬件','智能眼镜','录音与效率','陪伴机器人','随身 AI']) assert.equal(await page.getByRole('button',{name,exact:true}).count(),1);
-    assert.equal(await page.locator('.category-tabs img').evaluateAll(images=>images.length===5&&images.every(image=>image.complete&&image.naturalWidth>0)),true);
+    assert.equal(await page.locator('.category-tabs img').evaluateAll(images=>images.length===5&&images.every(image=>image.complete&&image.naturalWidth===256)),true);
   });
   await check('product page navigation and safe external video links',async()=>{
     await page.locator('.product-visual').first().click();

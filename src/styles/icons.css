@@ -1,6 +1,6 @@
 /* Xinwu interface icons and category navigation. */
 .xinwu-icon{display:inline-block;vertical-align:middle;flex-shrink:0}
-.icon-accent{stroke:var(--icon-accent,var(--accent))}
+.icon-accent{stroke:currentColor}
 .button:not(.light),.category-tabs button.selected{--icon-accent:currentColor}
 .search-link{align-items:center;gap:7px;font-size:12px;min-height:40px}
 .mobile-toggle{align-items:center;gap:5px;min-height:40px;min-width:44px;font-size:11px}
@@ -50,7 +50,7 @@
 .feature-main .feature-cta{padding:8px 12px}
 .feature-main{min-height:350px}
 .feature-main .feature-bottom h2{font-size:20px}}
-.category-art{display:block;flex-shrink:0;object-fit:contain}
+.category-art{display:block;flex-shrink:0;object-fit:contain;mix-blend-mode:multiply}
 .category-tabs{gap:10px}
 .category-tabs button{flex-direction:column;gap:9px;min-width:96px;padding:10px 12px 12px;border-radius:12px;transition:background .18s,border-color .18s}
 .category-tabs button .category-art{width:56px;height:56px;transition:transform .18s}
