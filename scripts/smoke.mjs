@@ -18,9 +18,9 @@ const checks = [];
 async function check(name, fn) { await fn(); checks.push(name); console.log(`PASS ${name}`); }
 try {
   await check('13 static routes, loaded images, desktop layout', async()=>{
-    for(const path of ['/', '/products/', '/products/even-g1/', '/products/plaud-note/', '/products/emo/', '/products/rabbit-r1/', '/products/plaud-notepin/', '/products/loona/', '/collections/', '/partners/', '/submit/', '/about/', '/404']) {
+    for(const path of ['/', '/products/', '/products/even-g1/', '/products/plaud-note/', '/products/emo/', '/products/rabbit-r1/', '/products/plaud-notepin/', '/products/loona/', '/collections/', '/partners/', '/submit/', '/about/', '/missing-page-smoke-test/']) {
       const response=await page.goto(origin+path,{waitUntil:'networkidle'});
-      assert.equal(response.status(),path==='/404'?404:200,path);
+      assert.equal(response.status(),path==='/missing-page-smoke-test/'?404:200,path);
       // Load any images below the fold before checking them.
       await page.locator('img').evaluateAll(images=>images.forEach(image=>image.loading='eager'));
       await page.waitForFunction(()=>[...document.images].every(image=>image.complete));
