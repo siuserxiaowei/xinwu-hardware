@@ -4,6 +4,7 @@ export interface Product {
   image: string; color: string; subtitle: string; description: string; tags: string[];
   source: string; scenes: [string, string][]; steps: string[]; questions: string[];
   facts: [string, string][];
+  editorial?: boolean; imageAlt?: string;
 }
 export const categories: {id:string;name:string;icon:CategoryArtName}[] = [
   { id: 'all', name: '全部硬件', icon: 'devices' },
@@ -13,6 +14,22 @@ export const categories: {id:string;name:string;icon:CategoryArtName}[] = [
   { id: 'assistants', name: '随身 AI', icon: 'handheld' },
 ];
 export const products: Product[] = [
+  {
+    slug: 'xiaodu-bear', name: '百度 AI 小度熊', brand: '实丰文化 × 百度智能云', category: 'AI 陪伴玩具', categoryId: 'robots',
+    image: 'xiaodu-bear', imageAlt: '马年款 AI 小度熊品牌展示图，棕色毛绒熊配橙色马头帽', editorial: true, color: '#eef2f5',
+    subtitle: '把 AI 对话，放进一只毛绒玩具里。',
+    description: '详细认识 AI 小度熊马年款：毛绒造型、百科问答、角色互动与使用流程，以及选购时需要了解的网络和服务条件。',
+    tags: ['毛绒陪伴', '语音互动'], source: 'https://www.chinababyfair.com/news/497.html', scenes: [], steps: [], questions: [],
+    facts: [['本文版本', 'AI 小度熊 · 马年款'], ['合作方', '实丰文化 / 百度智能云'], ['产品形态', '毛绒语音互动玩具'], ['公开功能定位', '百科解答 / 角色互动 / 教育辅助'], ['价格参考', '报道回顾发售定价 299 元，非现价']],
+  },
+  {
+    slug: 'm20-astronaut', name: 'M20 AI 宇航员', brand: '梦多福 / DODO', category: '桌面陪伴硬件', categoryId: 'robots',
+    image: 'm20-astronaut', imageAlt: '梦多福 M20 DODO 宇航员正面资料照片，来源我爱音频网', editorial: true, color: '#f0f0ec',
+    subtitle: '桌面上的宇航员，能陪你做什么？',
+    description: '以梦多福 M20 / DODO 为例，认识宇航员形态的音箱、表情、时钟夜灯与 AI 语音互动，并说明不同软件版本和服务费用的区别。',
+    tags: ['桌面互动', '音箱与时钟'], source: 'https://www.52audio.com/archives/243923.html', scenes: [], steps: [], questions: [],
+    facts: [['本文对象', '梦多福 M20 / DODO'], ['产品形态', '宇航员造型互动音箱'], ['可见功能', '声音 / 表情 / 时钟 / 夜灯'], ['硬件依据', '我爱音频网 2025.06 拆解样机'], ['选购重点', '型号、配套软件与服务权益']],
+  },
   {
     slug: 'even-g1', name: 'Even G1', brand: 'EVEN REALITIES', category: '智能眼镜', categoryId: 'glasses',
     image: 'even-product', color: '#e9eae3', subtitle: '把提示，放进视线里。',

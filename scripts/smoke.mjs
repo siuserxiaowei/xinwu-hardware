@@ -18,7 +18,7 @@ const checks = [];
 async function check(name, fn) { await fn(); checks.push(name); console.log(`PASS ${name}`); }
 try {
   await check('hardware routes, loaded images, desktop layout', async()=>{
-    for(const path of ['/', '/products/', '/products/even-g1/', '/products/plaud-note/', '/products/emo/', '/products/rabbit-r1/', '/products/plaud-notepin/', '/products/loona/', '/collections/', '/partners/', '/submit/', '/about/', '/design/', '/missing-page-smoke-test/']) {
+    for(const path of ['/', '/products/', '/products/even-g1/', '/products/xiaodu-bear/', '/products/m20-astronaut/', '/products/plaud-note/', '/products/emo/', '/products/rabbit-r1/', '/products/plaud-notepin/', '/products/loona/', '/collections/', '/partners/', '/submit/', '/about/', '/design/', '/missing-page-smoke-test/']) {
       const response=await page.goto(origin+path,{waitUntil:'networkidle'});
       assert.equal(response.status(),['/design/','/missing-page-smoke-test/'].includes(path)?404:200,path);
       // Load any images below the fold before checking them.
@@ -50,7 +50,7 @@ try {
     assert.equal(await page.locator('[data-product]:visible').count(),0);
     assert.equal(await page.locator('.empty-state').isVisible(),true);
     await page.locator('#reset-search').click();
-    assert.equal(await page.locator('[data-product]:visible').count(),6);
+    assert.equal(await page.locator('[data-product]:visible').count(),8);
   });
   await check('approved E sticker assets and named filter buttons',async()=>{
     await page.goto(origin+'/products/',{waitUntil:'networkidle'});
@@ -61,7 +61,7 @@ try {
     assert.equal(await page.locator('.category-tabs img').evaluateAll(images=>images.length===5&&images.every(image=>image.complete&&image.naturalWidth===256)),true);
   });
   await check('product page navigation and safe external video links',async()=>{
-    await page.locator('.product-visual').first().click();
+    await page.locator('.product-visual[href$="/products/even-g1/"]').click();
     assert.equal(page.url(),origin+'/products/even-g1/');
     const links=await page.locator('.video-links a').evaluateAll(nodes=>nodes.map(a=>({url:a.href,target:a.target,rel:a.rel})));
     assert.equal(links.length,2);
@@ -93,7 +93,7 @@ try {
   await check('mobile 390px and 320px layouts, menu and filtering',async()=>{
     for(const width of [390,320]) {
       await page.setViewportSize({width,height:844});
-      for(const path of ['/','/products/even-g1/','/collections/','/partners/','/submit/']) {
+      for(const path of ['/','/products/even-g1/','/products/xiaodu-bear/','/products/m20-astronaut/','/collections/','/partners/','/submit/']) {
         await page.goto(origin+path,{waitUntil:'networkidle'});
         assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true,`${width} ${path}`);
       }
@@ -107,7 +107,7 @@ try {
     assert.equal(await page.locator('#mobile-nav').isVisible(),false);
     assert.equal(await page.locator('[data-menu-label]').textContent(),'菜单');
     await page.locator('[data-category-filter="robots"]').click();
-    assert.equal(await page.locator('[data-product]:visible').count(),2);
+    assert.equal(await page.locator('[data-product]:visible').count(),4);
     await page.locator('[data-category-filter="all"]').click();
     await page.locator('img').evaluateAll(images=>images.forEach(image=>image.loading='eager'));
     await page.waitForFunction(()=>[...document.images].every(image=>image.complete));

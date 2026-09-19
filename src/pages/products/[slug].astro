@@ -1,14 +1,17 @@
 ---
 import { withBase } from '../../lib/urls';
 import Layout from '../../layouts/Layout.astro';
+import XiaoduBear from '../../components/guides/XiaoduBear.astro';
+import M20Astronaut from '../../components/guides/M20Astronaut.astro';
 import Icon from '../../components/Icon.astro';
 import ProductCard from '../../components/ProductCard.astro';
 import {products} from '../../data/products';
 export function getStaticPaths(){return products.map(product=>({params:{slug:product.slug},props:{product}}));}
 const {product:p}=Astro.props;
+const Guide = p.slug === 'xiaodu-bear' ? XiaoduBear : p.slug === 'm20-astronaut' ? M20Astronaut : null;
 const related=products.filter(x=>x.slug!==p.slug).sort((a,b)=>Number(b.categoryId===p.categoryId)-Number(a.categoryId===p.categoryId)).slice(0,3);
 ---
-<Layout title={`${p.name} · 产品介绍 · 新物`} description={p.description} active="products">
+{Guide ? <Guide product={p}/> : <Layout title={`${p.name} · 产品介绍 · 新物`} description={p.description} active="products">
 <div class="container detail-page">
   <nav class="breadcrumbs" aria-label="面包屑"><a href={withBase('/')}>发现</a><span>/</span><a href={withBase(`/products/?category=${p.categoryId}`)}>{p.category}</a><span>/</span><span>{p.name}</span></nav>
   <section class="product-hero"><div class="detail-image" style={`--product-bg:${p.color}`}><span class="pill">{p.category}</span><img src={withBase(`/images/${p.image}.webp`)} alt={`${p.name} 官方产品图`} width="900" height="740" fetchpriority="high"/><span class="image-credit">图片来源 / {p.brand}</span></div><div class="product-summary"><span class="eyebrow">{p.brand}</span><h1>{p.name}</h1><h2>{p.subtitle}</h2><p>{p.description}</p><div class="tags">{p.tags.map(t=><span>{t}</span>)}</div><div class="evidence-label"><span class="tiny-dot"></span>资料介绍 · 尚未实测</div><div class="detail-actions"><a class="button" href={p.source} target="_blank" rel="noopener noreferrer">前往品牌官网 <Icon name="external" size={18}/></a><a class="text-link" href="#video-links">查看视频入口</a></div><p class="detail-disclaimer">按品牌公开资料整理 · 收录于 2026.09.18<br/>价格、服务地区与功能以品牌当前说明为准。</p></div></section>
@@ -22,4 +25,4 @@ const related=products.filter(x=>x.slug!==p.slug).sort((a,b)=>Number(b.categoryI
   </div><aside class="product-aside"><span class="eyebrow">AT A GLANCE</span><h3>产品速览</h3><dl>{p.facts.map(([k,v])=><div><dt>{k}</dt><dd>{v}</dd></div>)}</dl><a href={p.source} target="_blank" rel="noopener noreferrer" class="text-link">前往品牌官网 <Icon name="external" size={17}/></a><div class="aside-tip"><strong>你更关心哪一点？</strong><p>挑选 AI 硬件时，一起考虑设备、配套软件、网络和持续使用成本。</p></div></aside></div>
   <section class="related"><div class="section-title"><div><span class="eyebrow">KEEP EXPLORING</span><h2>也许，你还会好奇。</h2></div><a class="text-link" href={withBase('/products/')}>全部硬件</a></div><div class="product-grid">{related.map(p=><ProductCard product={p}/>)}</div></section>
 </div>
-</Layout>
+</Layout>}

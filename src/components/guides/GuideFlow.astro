@@ -1,0 +1,9 @@
+---
+interface Props { title: string; note: string; steps: [string, string][]; }
+const { title, note, steps } = Astro.props;
+---
+<figure class="guide-flow">
+  <figcaption><span class="eyebrow">XINWU / 使用示意</span><strong>{title}</strong></figcaption>
+  <ol>{steps.map(([label, text], i) => <li><span class="guide-flow-number">0{i + 1}</span><strong>{label}</strong><p>{text}</p></li>)}</ol>
+  <p class="guide-flow-note">{note}</p>
+</figure>

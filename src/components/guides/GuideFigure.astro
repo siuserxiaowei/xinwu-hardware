@@ -1,0 +1,11 @@
+---
+import { withBase } from '../../lib/urls';
+interface Props { file: string; alt: string; width: number; height: number; caption: string; source: string; credit: string; hero?: boolean; }
+const { file, alt, width, height, caption, source, credit, hero = false } = Astro.props;
+---
+<figure class:list={['guide-figure', { 'guide-cover': hero }]}>
+  <a class="guide-image-link" href={withBase(`/images/${file}.webp`)} target="_blank" rel="noopener noreferrer" aria-label={`${alt}，打开大图`}>
+    <img src={withBase(`/images/${file}.webp`)} alt={alt} width={width} height={height} loading={hero ? 'eager' : 'lazy'} fetchpriority={hero ? 'high' : 'auto'}/>
+  </a>
+  <figcaption><span>{caption}</span><a href={source} target="_blank" rel="noopener noreferrer">图片来源：{credit}</a></figcaption>
+</figure>

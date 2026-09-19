@@ -5,10 +5,14 @@ interface Props { product: Product; }
 const {product:p} = Astro.props;
 ---
 <article class="product-card" data-product data-category={p.categoryId} data-search={[p.name,p.brand,p.category,p.subtitle,...p.tags].join(' ').toLowerCase()}>
-  <a class="product-visual" href={withBase(`/products/${p.slug}/`)} style={`--product-bg:${p.color}`} aria-label={`了解 ${p.name}`}>
-    <span class="image-label">{p.category}</span><img src={withBase(`/images/${p.image}.webp`)} width="700" height="550" alt={`${p.name} 官方产品图`} loading="lazy"/><span class="card-cta">查看产品</span>
+  <a class:list={["product-visual", { "guide-card": p.editorial }]} href={withBase(`/products/${p.slug}/`)} style={`--product-bg:${p.color}`} aria-label={`了解 ${p.name}`}>
+    <span class="image-label">{p.category}</span><img src={withBase(`/images/${p.image}.webp`)} width="700" height="550" alt={p.imageAlt || `${p.name} 官方产品图`} loading="lazy"/><span class="card-cta">查看产品</span>
   </a>
-  <div class="product-meta"><span>{p.brand}</span><span class="source-label">资料介绍</span></div>
+  <div class="product-meta"><span>{p.brand}</span><span class="source-label">{p.editorial ? '图文详解' : '资料介绍'}</span></div>
   <h3><a href={withBase(`/products/${p.slug}/`)}>{p.name}</a></h3><p>{p.subtitle}</p>
   <div class="tags">{p.tags.map(t=><span>{t}</span>)}</div>
 </article>
+
+<style>
+.product-visual.guide-card img{mix-blend-mode:normal;object-fit:contain;padding:38px 9px 20px}.product-visual.guide-card:hover img{transform:none}
+</style>
